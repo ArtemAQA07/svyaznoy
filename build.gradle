@@ -1,0 +1,69 @@
+plugins {
+    id 'java-library' // Подключение плагина для работы с Java библиотеками
+    id "io.qameta.allure" version "3.0.0" // Подключение плагина для интеграции с Allure
+}
+
+group = 'ru.mvideo'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral() // Указание репозитория Maven Central для получения зависимостей
+}
+
+
+allure {
+    report {
+        version.set("2.25.0") // Установка версии Allure для отчетов
+    }
+    adapter {
+        aspectjWeaver.set(true) // Использование AspectJ Weaver для Allure
+        frameworks {
+            junit5 {
+                adapterVersion.set("2.25.0") // Установка версии Allure адаптера для JUnit 5
+            }
+        }
+    }
+}
+
+dependencies {
+
+    testImplementation( 'com.codeborne:selenide:7.2.1', // Добавление зависимости Selenide для тестов
+            'org.junit.jupiter:junit-jupiter:5.10.1', // Добавление зависимости JUnit 5 для тестов
+            'io.qameta.allure:allure-junit5:2.25.0', // Добавление поддержки Allure отчетов для JUnit 5
+            'io.qameta.allure:allure-selenide:2.25.0', // Добавление зависимости Allure Selenide для интеграции отчетов
+            'org.slf4j:slf4j-simple:2.0.7' // Добавление зависимости SLF4J для логирования
+    )
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform() // Указание использовать JUnit Platform для запуска тестов
+
+    testLogging {
+        lifecycle {
+            events "started", "skipped", "failed", "standard_error", "standard_out"// Конфигурация логирования тестов: какие события логировать
+            exceptionFormat "short" // Форматирование исключений в коротком виде
+        }
+    }
+}
+tasks.withType(JavaCompile).configureEach { // Для UTF-8
+    options.encoding = 'UTF-8'
+}
+// Отдельная таска для Дженкинса
+tasks.register('checking_test', Test) {
+    useJUnitPlatform {
+        includeTags("checking")
+    }
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+}
+
+tasks.register("copyAllureResults", Copy) {
+    dependsOn test
+    from "$buildDir/allure-results"
+    into "$projectDir/allure-results"
+}
