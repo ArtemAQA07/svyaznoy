@@ -12,6 +12,8 @@ import static com.codeborne.selenide.Selenide.open;
 
 public class HomeTests extends TestBase {
 
+    String product = "IPHONE";
+
     HomePage steps = new HomePage();
 
     @Test
@@ -41,8 +43,49 @@ public class HomeTests extends TestBase {
         steps.checkHideButtonVisible();
         steps.clickHideButton();
         steps.checkHideButtonHidden();
+    }
+
+    @Test
+    @DisplayName("Проверка работы кнопок категорий")
+    @Tag("smoke")
+    void ButtonTest() {
+        steps.openPage();
+        steps.checkSelectCategoryPhones();
+        steps.openPage();
+        steps.checkSelectCategoryGadgets();
+        steps.openPage();
+        steps.checkSelectCategoryAutomotiveElectronics();
+        steps.openPage();
+        steps.checkSelectCategoryAccessories();
+        steps.openPage();
+        steps.checkSelectCategoryHouseholdAppliances();
+        steps.openPage();
+        steps.checkSelectCategoryGamingPlatforms();
+        steps.openPage();
+        steps.checkSelectCategoryModemsAndRouters();
+        steps.openPage();
+        steps.checkSelectCategoryLaptops();
+    }
+
+    @Test
+    @DisplayName("Проверка работы поиска")
+    @Tag("smoke")
+    void searchTest(){
+        steps.openPage();
+        steps.InputTest(product);
+        steps.ConfirmingThatThisSpecificProductHasBeenFound(product);
+    }
+
+    @Test
+    @DisplayName("Проверка покупки телефона ''Iphone 11'")
+    @Tag("smoke")
+    void buyPhoneTest(){
+        steps.openPage();
+        steps.InputTest("Iphone 11");
 
     }
 }
+
+
 
 
