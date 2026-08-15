@@ -1,5 +1,6 @@
 package tests;
 
+import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Owner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -82,7 +83,34 @@ public class HomeTests extends TestBase {
     void buyPhoneTest(){
         steps.openPage();
         steps.InputTest("Iphone 11");
+        steps.testClickOnProductNameRedirectsToProductCard();
+        steps.testClickOnShopButtonRedirectsToYandexMarket();
+    }
 
+    @Test
+    @DisplayName("Проверка добавления в избранное")
+    @Tag("smoke")
+    void TestForAddingToFavorites(){
+        steps.openPage();
+        steps.InputTest("Iphone 11");
+        steps.testClickOnProductNameRedirectsToProductCard();
+        steps.testClickFavoritesButton();
+        steps.openFavorites();
+        steps.testOnFavoritesPage();
+        steps.productInFavoritesTest();
+    }
+
+    @Test
+    @DisplayName("Проверка добавления в Сравнение")
+    @Tag("smoke")
+    void TestForAddingToСompare() {
+        steps.openPage();
+        steps.InputTest("Iphone 11");
+        steps.testClickOnProductNameRedirectsToProductCard();
+        steps.testClickСompareButton();
+        steps.openСompare();
+        steps.testOnСomparePage();
+        steps.productInСompareTest();
     }
 }
 

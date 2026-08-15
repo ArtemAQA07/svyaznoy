@@ -15,12 +15,12 @@ import static com.codeborne.selenide.Selenide.*;
 public class HomePage {
 
     private final SelenideElement
-    header = $(".l-header__top-bar"),
-    mainBanner = $(".c-header-middle-bar__container"),
-    categories = $(".l-categories-compact"),
-    showButton = $(".l-categories-compact__show-button"),
-    hideButton = $(".l-categories-compact__hide-button"),
-    items1 = $(byTagAndText("span", "Смартфоны")),
+            header = $(".l-header__top-bar"),
+            mainBanner = $(".c-header-middle-bar__container"),
+            categories = $(".l-categories-compact"),
+            showButton = $(".l-categories-compact__show-button"),
+            hideButton = $(".l-categories-compact__hide-button"),
+            items1 = $(byTagAndText("span", "Смартфоны")),
             items2 = $(byTagAndText("span", "Гаджеты")),
             items3 = $(byTagAndText("span", "Автомобильная электроника")),
             items4 = $(byTagAndText("span", "Аксессуары")),
@@ -28,11 +28,19 @@ public class HomePage {
             items6 = $(byTagAndText("span", "Игровые платформы")),
             items7 = $(byTagAndText("span", "Модемы и роутеры")),
             items8 = $(byTagAndText("span", "Ноутбуки")),
-    input = $(".c-input-search__input"),
-    ProductPage = $(".c-product-thumb__name");
-
-
-
+            input = $(".c-input-search__input"),
+            ProductPage = $(".c-product-thumb__name"),
+            productName = $x("//span[contains(text(), 'Смартфон Apple iPhone 11 (новая комплектация) 64Gb Белый')]"),
+            goToShopButton = $x("//span[contains(text(), 'Перейти в магазин')]"),
+            searchField = $("[data-auto='snippet-title']"),
+            favoriteButton = $(byTagAndText("span", "В избранное")),
+            favoritesTitle = $x("//h1[contains(text(), 'Избранное')]"),
+            heartButton = $(byTagAndText("a", "Перейти в избранное")),
+            favoriteProduct = $(byTagAndText("span", "Смартфон Apple iPhone 11 (новая комплектация) 64Gb Белый")),
+            compareButton = $(byTagAndText("span", "К сравнению")),
+            comparisonButton = $(byTagAndText("a", "Сравнить")),
+            compareTitle = $x("//h1[contains(text(), 'Сравнение товаров')]"),
+            compareProduct = $(byTagAndText("a", "Смартфон Apple iPhone 11 (новая комплектация) 64Gb Белый"));
 
 
 
@@ -40,7 +48,7 @@ public class HomePage {
     public void openPage() {
         open("");
         Selenide.sleep(3000);
-        }
+    }
 
     @Step("Проверка элементов верхнего блока")
     public void checkTopHeader(String element) {
@@ -61,20 +69,29 @@ public class HomePage {
 
 
     @Step("Проверка кнопки 'Показать еще' ")
-    public void checkShowButton() {showButton.shouldBe(visible).click();sleep(1000);}
+    public void checkShowButton() {
+        showButton.shouldBe(visible).click();
+        sleep(1000);
+    }
 
 
     @Step("Проверка, что кнопка 'Скрыть' отображается")
-    public void checkHideButtonVisible() {hideButton.shouldBe(visible);}
-
+    public void checkHideButtonVisible() {
+        hideButton.shouldBe(visible);
+    }
 
 
     @Step("Нажать на кнопку 'Скрыть'")
-    public void clickHideButton() {hideButton.shouldBe(visible).click();sleep(1000);}
+    public void clickHideButton() {
+        hideButton.shouldBe(visible).click();
+        sleep(1000);
+    }
 
 
     @Step("Проверка, что кнопка 'Скрыть' скрыта")
-    public void checkHideButtonHidden() {hideButton.shouldNotBe(visible);}
+    public void checkHideButtonHidden() {
+        hideButton.shouldNotBe(visible);
+    }
 
 
     @Step("Проверка, что при нажатии кнопки 'Смартфоны' переносит в данную категорию")
@@ -134,18 +151,72 @@ public class HomePage {
     }
 
     @Step("Проверка работы поиска")
-    public void InputTest(String product){
+    public void InputTest(String product) {
         input.click();
         input.setValue(product).pressEnter();
     }
+
     @Step("Проверка, что именно этот продукт найден")
-    public void ConfirmingThatThisSpecificProductHasBeenFound(String product){
+    public void ConfirmingThatThisSpecificProductHasBeenFound(String product) {
         ProductPage.shouldHave(text(product));
     }
 
     @Step("Проверка перехода по карточки товара")
-    public void ProductPageTest(String product){
-        ProductPage.shouldHave(text(product));
+    public void testClickOnProductNameRedirectsToProductCard() {
+        productName.shouldBe(visible);
+        productName.click();
+    }
+
+    @Step("Проверка перехрда в маркетплейс")
+    public void testClickOnShopButtonRedirectsToYandexMarket(){
+        goToShopButton.shouldBe(visible);
+        goToShopButton.click();
+        Selenide.switchTo().window(1);
+        sleep(5000);
+        searchField.shouldBe(visible);
+        searchField.shouldHave(text("iPhone 11"));
+    }
+
+    @Step("Проверка нажатия кнопки 'В избранное'")
+    public void testClickFavoritesButton(){
+        favoriteButton.click();
+    }
+
+    @Step("Открыть Избранное")
+    public void openFavorites() {
+        heartButton.shouldBe(visible);
+        heartButton.click();
+    }
+
+    @Step("Проверка что пользователь на странице Избранное")
+    public void testOnFavoritesPage(){
+        favoritesTitle.shouldBe(visible);
+    }
+
+    @Step("Проверка что товар находиться в Избранном")
+    public void productInFavoritesTest(){
+        favoriteProduct.shouldBe(visible);
+    }
+
+    @Step("Проверка нажатия кнопки 'К сравнению'")
+    public void testClickСompareButton(){
+        compareButton.click();
+    }
+
+    @Step("Открыть Сравнение")
+    public void openСompare() {
+        comparisonButton.shouldBe(visible);
+        comparisonButton.click();
+    }
+
+    @Step("Проверка что пользователь на странице Сравнение")
+    public void testOnСomparePage(){
+        compareTitle.shouldBe(visible);
+    }
+
+    @Step("Проверка что товар находиться в Сравнение")
+    public void productInСompareTest(){
+        compareProduct.shouldBe(visible);
     }
 
 
