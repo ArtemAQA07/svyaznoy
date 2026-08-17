@@ -1,5 +1,5 @@
 # Проект по автоматизации тестирования
-# для компании [СВЯЗНОЙ](https://svyaznoy.instavktok.ru/) <img alt="Jenkins" height="25" src="images/icons/svyaznoy.jpg" width="80"/>
+# для компании [СВЯЗНОЙ](https://svyaznoy.instavktok.ru/) <img alt="Jenkins" height="25" src="images/images/icons/svyaznoy.jpg" width="80"/>
 
 > «РЖД» - Российские железные дороги, это крупнейшая российская компания, осуществляющая железнодорожные перевозки грузов и пассажиров. Основные цели включают проверку функциональности сайта.
 
