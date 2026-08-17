@@ -1,0 +1,12 @@
+# Copy to config.properties and fill in values for local/CI overrides.
+# Priority: -DsystemProperty > ENV_VAR > config.properties > defaults in TestConfig
+
+baseUrl=https://svyaznoy.instavktok.ru/
+remoteUrl=
+browser=chrome
+browserSize=1920x1080
+timeout=10000
+selenoidVideoUrl=https://selenoid.autotests.cloud/video/
+
+# Example for remote Selenoid run (do not commit real credentials):
+# remoteUrl=https://USER:PASSWORD@selenoid.autotests.cloud/wd/hub
