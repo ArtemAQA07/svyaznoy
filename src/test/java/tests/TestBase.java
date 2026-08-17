@@ -16,10 +16,11 @@ import java.util.Map;
 public class TestBase {
 
     @BeforeAll
+    //эта аннотация выполняет НАСТРОЙКИ которые в ней заданы ПЕРЕД ВСЕМИ тестами один раз, например настройка определенного размера браузера
     static void beforeAll() {
         Configuration.browser = TestConfig.browser();
         Configuration.browserSize = TestConfig.browserSize();
-        Configuration.pageLoadStrategy = "eager";
+        Configuration.pageLoadStrategy = "eager";//стратегия загрузки, если страница долго грузится, с ее помощью мы не будем дожидаться полной загрузки страницы
         Configuration.baseUrl = TestConfig.baseUrl();
         Configuration.timeout = TestConfig.timeout();
 
@@ -29,29 +30,23 @@ public class TestBase {
             capabilities.setCapability("selenoid:options", Map.of(
                     "enableVNC", true,
                     "enableVideo", true
-            ));
-            Configuration.browserCapabilities = capabilities;
+            ));//Настройки для Selenoid (включение VNC и записи видео).
+            Configuration.browserCapabilities = capabilities;//Присвоение настроек конфигурации браузера
         }
     }
 
     @BeforeEach
+        //метод выполняется перед каждым тестом
     void setUpBeforeEach() {
-        SelenideLogger.addListener("AllureSelenide", new AllureSelenide()
-                .screenshots(false)
-                .savePageSource(false));
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());//включение слушателя Аллюр
     }
 
     @AfterEach
-    void tearDown() {
-        if (Selenide.webdriver().driver().hasWebDriverStarted()) {
-            Attach.screenshotAs("Last screenshot");
-            Attach.pageSource();
-            Attach.browserConsoleLogs();
-            if (TestConfig.isRemoteRun()) {
-                Attach.addVideo();
-            }
-        }
-        Selenide.closeWebDriver();
-        SelenideLogger.removeListener("AllureSelenide");
+        //выполняется после каждого теста
+    void addAttachments() {
+       Attach.screenshotAs("Last screenshot"); //Скриншот последнего состояния браузера.
+        Attach.browserConsoleLogs(); //Логи консоли браузера.
+        Attach.addVideo(); // Видео записи теста.
+        Selenide.closeWebDriver(); //Закрывает браузер.
     }
 }
