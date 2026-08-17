@@ -1,9 +1,9 @@
 plugins {
-    id 'java-library' // Подключение плагина для работы с Java библиотеками
-    id "io.qameta.allure" version "3.0.0" // Подключение плагина для интеграции с Allure
+    id 'java-library'
+    id 'io.qameta.allure' version '3.0.0'
 }
 
-group = 'ru.mvideo'
+group = 'ru.svyaznoy'
 
 java {
     toolchain {
@@ -12,58 +12,78 @@ java {
 }
 
 repositories {
-    mavenCentral() // Указание репозитория Maven Central для получения зависимостей
+    mavenCentral()
 }
-
 
 allure {
     report {
-        version.set("2.25.0") // Установка версии Allure для отчетов
+        version.set('2.25.0')
     }
     adapter {
-        aspectjWeaver.set(true) // Использование AspectJ Weaver для Allure
+        aspectjWeaver.set(true)
         frameworks {
             junit5 {
-                adapterVersion.set("2.25.0") // Установка версии Allure адаптера для JUnit 5
+                adapterVersion.set('2.25.0')
             }
         }
     }
 }
 
 dependencies {
-
-    testImplementation( 'com.codeborne:selenide:7.2.1', // Добавление зависимости Selenide для тестов
-            'org.junit.jupiter:junit-jupiter:5.10.1', // Добавление зависимости JUnit 5 для тестов
-            'io.qameta.allure:allure-junit5:2.25.0', // Добавление поддержки Allure отчетов для JUnit 5
-            'io.qameta.allure:allure-selenide:2.25.0', // Добавление зависимости Allure Selenide для интеграции отчетов
-            'org.slf4j:slf4j-simple:2.0.7' // Добавление зависимости SLF4J для логирования
+    testImplementation(
+            'com.codeborne:selenide:7.2.1',
+            'org.junit.jupiter:junit-jupiter:5.10.1',
+            'io.qameta.allure:allure-junit5:2.25.0',
+            'io.qameta.allure:allure-selenide:2.25.0',
+            'org.slf4j:slf4j-simple:2.0.7'
     )
 }
 
-tasks.withType(Test) {
-    useJUnitPlatform() // Указание использовать JUnit Platform для запуска тестов
+def configureTestTask = { Test task, String tag ->
+    task.useJUnitPlatform {
+        includeTags(tag)
+    }
+    task.testClassesDirs = sourceSets.test.output.classesDirs
+    task.classpath = sourceSets.test.runtimeClasspath
+    task.systemProperty 'baseUrl', System.getProperty('baseUrl', '')
+    task.systemProperty 'remoteUrl', System.getProperty('remoteUrl', System.getenv('REMOTE_URL') ?: '')
+    task.systemProperty 'browser', System.getProperty('browser', '')
+    task.systemProperty 'browserSize', System.getProperty('browserSize', '')
+    task.systemProperty 'timeout', System.getProperty('timeout', '')
+    task.systemProperty 'selenoidVideoUrl', System.getProperty('selenoidVideoUrl', '')
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    systemProperty 'baseUrl', System.getProperty('baseUrl', '')
+    systemProperty 'remoteUrl', System.getProperty('remoteUrl', System.getenv('REMOTE_URL') ?: '')
+    systemProperty 'browser', System.getProperty('browser', '')
+    systemProperty 'browserSize', System.getProperty('browserSize', '')
+    systemProperty 'timeout', System.getProperty('timeout', '')
+    systemProperty 'selenoidVideoUrl', System.getProperty('selenoidVideoUrl', '')
 
     testLogging {
         lifecycle {
-            events "started", "skipped", "failed", "standard_error", "standard_out"// Конфигурация логирования тестов: какие события логировать
-            exceptionFormat "short" // Форматирование исключений в коротком виде
+            events 'started', 'skipped', 'failed', 'standard_error', 'standard_out'
+            exceptionFormat 'short'
         }
     }
 }
-tasks.withType(JavaCompile).configureEach { // Для UTF-8
+
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
-// Отдельная таска для Дженкинса
-tasks.register('checking_test', Test) {
-    useJUnitPlatform {
-        includeTags("checking")
-    }
-    testClassesDirs = sourceSets.test.output.classesDirs
-    classpath = sourceSets.test.runtimeClasspath
+
+tasks.register('smoke_test', Test) {
+    configureTestTask(it, 'smoke')
 }
 
-tasks.register("copyAllureResults", Copy) {
+tasks.register('regression_test', Test) {
+    configureTestTask(it, 'regression')
+}
+
+tasks.register('copyAllureResults', Copy) {
     dependsOn test
-    from "$buildDir/allure-results"
-    into "$projectDir/allure-results"
+    from layout.buildDirectory.dir('allure-results')
+    into layout.projectDirectory.dir('allure-results')
 }

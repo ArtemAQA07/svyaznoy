@@ -2,15 +2,14 @@ package pages;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.selector.ByTagAndText;
+import config.TestData;
 import io.qameta.allure.Step;
-import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byTagAndText;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 
 public class HomePage {
 
@@ -20,204 +19,132 @@ public class HomePage {
             categories = $(".l-categories-compact"),
             showButton = $(".l-categories-compact__show-button"),
             hideButton = $(".l-categories-compact__hide-button"),
-            items1 = $(byTagAndText("span", "Смартфоны")),
-            items2 = $(byTagAndText("span", "Гаджеты")),
-            items3 = $(byTagAndText("span", "Автомобильная электроника")),
-            items4 = $(byTagAndText("span", "Аксессуары")),
-            items5 = $(byTagAndText("span", "Бытовая техника")),
-            items6 = $(byTagAndText("span", "Игровые платформы")),
-            items7 = $(byTagAndText("span", "Модемы и роутеры")),
-            items8 = $(byTagAndText("span", "Ноутбуки")),
-            input = $(".c-input-search__input"),
-            ProductPage = $(".c-product-thumb__name"),
-            productName = $x("//span[contains(text(), 'Смартфон Apple iPhone 11 (новая комплектация) 64Gb Белый')]"),
+            searchInput = $(".c-input-search__input"),
+            searchResultName = $(".c-product-thumb__name"),
+            productName = $x("//span[contains(text(), '" + TestData.PRODUCT_FULL_NAME + "')]"),
             goToShopButton = $x("//span[contains(text(), 'Перейти в магазин')]"),
-            searchField = $("[data-auto='snippet-title']"),
+            marketplaceProductTitle = $("[data-auto='snippet-title']"),
             favoriteButton = $(byTagAndText("span", "В избранное")),
             favoritesTitle = $x("//h1[contains(text(), 'Избранное')]"),
-            heartButton = $(byTagAndText("a", "Перейти в избранное")),
-            favoriteProduct = $(byTagAndText("span", "Смартфон Apple iPhone 11 (новая комплектация) 64Gb Белый")),
+            favoritesLink = $(byTagAndText("a", "Перейти в избранное")),
+            favoriteProduct = $(byTagAndText("span", TestData.PRODUCT_FULL_NAME)),
             compareButton = $(byTagAndText("span", "К сравнению")),
-            comparisonButton = $(byTagAndText("a", "Сравнить")),
+            compareLink = $(byTagAndText("a", "Сравнить")),
             compareTitle = $x("//h1[contains(text(), 'Сравнение товаров')]"),
-            compareProduct = $(byTagAndText("a", "Смартфон Apple iPhone 11 (новая комплектация) 64Gb Белый"));
-
-
+            compareProduct = $(byTagAndText("a", TestData.PRODUCT_FULL_NAME));
 
     @Step("Открыть главную страницу")
     public void openPage() {
         open("");
-        Selenide.sleep(3000);
+        mainBanner.shouldBe(visible);
     }
 
-    @Step("Проверка элементов верхнего блока")
+    @Step("Проверка элементов верхнего блока: {element}")
     public void checkTopHeader(String element) {
         header.shouldHave(text(element));
     }
-
 
     @Step("Проверка отображения главного баннера")
     public void checkMainBanner() {
         mainBanner.shouldBe(visible);
     }
 
-
-    @Step("Проверка отображения популярных категорий товаров")
+    @Step("Проверка отображения популярных категорий товаров: {element}")
     public void checkCategories(String element) {
         categories.shouldHave(text(element));
     }
 
-
-    @Step("Проверка кнопки 'Показать еще' ")
+    @Step("Проверка кнопки 'Показать еще'")
     public void checkShowButton() {
         showButton.shouldBe(visible).click();
-        sleep(1000);
+        hideButton.shouldBe(visible);
     }
-
 
     @Step("Проверка, что кнопка 'Скрыть' отображается")
     public void checkHideButtonVisible() {
         hideButton.shouldBe(visible);
     }
 
-
     @Step("Нажать на кнопку 'Скрыть'")
     public void clickHideButton() {
         hideButton.shouldBe(visible).click();
-        sleep(1000);
     }
-
 
     @Step("Проверка, что кнопка 'Скрыть' скрыта")
     public void checkHideButtonHidden() {
         hideButton.shouldNotBe(visible);
     }
 
-
-    @Step("Проверка, что при нажатии кнопки 'Смартфоны' переносит в данную категорию")
-    public void checkSelectCategoryPhones() {
-        items1.click();
-        sleep(3000);
-        $(".category-name").shouldHave(text("Смартфоны"));
+    @Step("Выбрать категорию: {categoryName}")
+    public void selectCategory(String categoryName) {
+        $(byTagAndText("span", categoryName)).shouldBe(visible).click();
+        $(".category-name").shouldHave(text(categoryName));
     }
 
-    @Step("Проверка, что при нажатии кнопки 'Гаджеты' категории переносит в данную категорию")
-    public void checkSelectCategoryGadgets() {
-        items2.click();
-        sleep(3000);
-        $(".category-name").shouldHave(text("Гаджеты"));
+    @Step("Выполнить поиск: {product}")
+    public void searchProduct(String product) {
+        searchInput.shouldBe(visible).click();
+        searchInput.setValue(product).pressEnter();
+        searchResultName.shouldBe(visible);
     }
 
-    @Step("Проверка, что при нажатии кнопки  'Автомобильная электроника' переносит в данную категорию")
-    public void checkSelectCategoryAutomotiveElectronics() {
-        items3.click();
-        sleep(3000);
-        $(".category-name").shouldHave(text("Автомобильная электроника"));
+    @Step("Проверить, что в результатах поиска есть: {product}")
+    public void verifySearchResultContains(String product) {
+        searchResultName.shouldHave(text(product));
     }
 
-    @Step("Проверка, что при нажатии кнопки 'Аксессуары' переносит в данную категорию")
-    public void checkSelectCategoryAccessories() {
-        items4.click();
-        sleep(3000);
-        $(".category-name").shouldHave(text("Аксессуары"));
+    @Step("Открыть карточку товара")
+    public void openProductCard() {
+        productName.shouldBe(visible).click();
     }
 
-    @Step("Проверка, что при нажатии кнопки 'Бытовая техника' переносит в данную категорию")
-    public void checkSelectCategoryHouseholdAppliances() {
-        items5.click();
-        sleep(3000);
-        $(".category-name").shouldHave(text("Бытовая техника"));
-    }
-
-    @Step("Проверка, что при нажатии кнопки 'Игровые платформы' переносит в данную категорию")
-    public void checkSelectCategoryGamingPlatforms() {
-        items6.click();
-        sleep(3000);
-        $(".category-name").shouldHave(text("Игровые платформы"));
-    }
-
-    @Step("Проверка, что при нажатии кнопки 'Модемы и роутеры' переносит в данную категорию")
-    public void checkSelectCategoryModemsAndRouters() {
-        items7.click();
-        sleep(3000);
-        $(".category-name").shouldHave(text("Модемы и роутеры"));
-    }
-
-    @Step("Проверка, что при нажатии кнопки 'Ноутбуки' переносит в данную категорию")
-    public void checkSelectCategoryLaptops() {
-        items8.click();
-        sleep(3000);
-        $(".category-name").shouldHave(text("Ноутбуки"));
-    }
-
-    @Step("Проверка работы поиска")
-    public void InputTest(String product) {
-        input.click();
-        input.setValue(product).pressEnter();
-    }
-
-    @Step("Проверка, что именно этот продукт найден")
-    public void ConfirmingThatThisSpecificProductHasBeenFound(String product) {
-        ProductPage.shouldHave(text(product));
-    }
-
-    @Step("Проверка перехода по карточки товара")
-    public void testClickOnProductNameRedirectsToProductCard() {
-        productName.shouldBe(visible);
-        productName.click();
-    }
-
-    @Step("Проверка перехрда в маркетплейс")
-    public void testClickOnShopButtonRedirectsToYandexMarket(){
-        goToShopButton.shouldBe(visible);
-        goToShopButton.click();
+    @Step("Проверить переход в маркетплейс")
+    public void verifyShopRedirectToMarketplace() {
+        goToShopButton.shouldBe(visible).click();
         Selenide.switchTo().window(1);
-        sleep(5000);
-        searchField.shouldBe(visible);
-        searchField.shouldHave(text("iPhone 11"));
+        marketplaceProductTitle.shouldBe(visible);
+        marketplaceProductTitle.shouldHave(text(TestData.MARKETPLACE_PRODUCT_TITLE));
+        Selenide.closeWindow();
+        Selenide.switchTo().window(0);
     }
 
-    @Step("Проверка нажатия кнопки 'В избранное'")
-    public void testClickFavoritesButton(){
-        favoriteButton.click();
+    @Step("Добавить товар в избранное")
+    public void addToFavorites() {
+        favoriteButton.shouldBe(visible).click();
     }
 
-    @Step("Открыть Избранное")
+    @Step("Открыть страницу избранного")
     public void openFavorites() {
-        heartButton.shouldBe(visible);
-        heartButton.click();
+        favoritesLink.shouldBe(visible).click();
     }
 
-    @Step("Проверка что пользователь на странице Избранное")
-    public void testOnFavoritesPage(){
+    @Step("Проверить, что открыта страница избранного")
+    public void verifyFavoritesPageOpened() {
         favoritesTitle.shouldBe(visible);
     }
 
-    @Step("Проверка что товар находиться в Избранном")
-    public void productInFavoritesTest(){
+    @Step("Проверить, что товар находится в избранном")
+    public void verifyProductInFavorites() {
         favoriteProduct.shouldBe(visible);
     }
 
-    @Step("Проверка нажатия кнопки 'К сравнению'")
-    public void testClickСompareButton(){
-        compareButton.click();
+    @Step("Добавить товар к сравнению")
+    public void addToCompare() {
+        compareButton.shouldBe(visible).click();
     }
 
-    @Step("Открыть Сравнение")
-    public void openСompare() {
-        comparisonButton.shouldBe(visible);
-        comparisonButton.click();
+    @Step("Открыть страницу сравнения")
+    public void openComparePage() {
+        compareLink.shouldBe(visible).click();
     }
 
-    @Step("Проверка что пользователь на странице Сравнение")
-    public void testOnСomparePage(){
+    @Step("Проверить, что открыта страница сравнения")
+    public void verifyComparePageOpened() {
         compareTitle.shouldBe(visible);
     }
 
-    @Step("Проверка что товар находиться в Сравнение")
-    public void productInСompareTest(){
+    @Step("Проверить, что товар находится в сравнении")
+    public void verifyProductInCompare() {
         compareProduct.shouldBe(visible);
     }
-
-
 }

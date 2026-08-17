@@ -1,119 +1,98 @@
 package tests;
 
-import com.codeborne.selenide.Selenide;
+import config.TestData;
 import io.qameta.allure.Owner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import pages.HomePage;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import java.util.stream.Stream;
 
+@Owner("Artem")
 public class HomeTests extends TestBase {
 
-    String product = "IPHONE";
+    private final HomePage homePage = new HomePage();
 
-    HomePage steps = new HomePage();
+    static Stream<String> categoryNames() {
+        return Stream.of(TestData.CATEGORIES);
+    }
 
     @Test
     @DisplayName("Проверка отображения элементов главной страницы")
     @Tag("smoke")
-    void homeTest() {
-        steps.openPage();
-        steps.checkTopHeader("Бренды");
-        steps.checkTopHeader("Кредиты");
-        steps.checkTopHeader("Авиабилеты");
+    void homePageElementsTest() {
+        homePage.openPage();
 
+        for (String headerLink : TestData.HEADER_LINKS) {
+            homePage.checkTopHeader(headerLink);
+        }
 
-        steps.checkMainBanner();
+        homePage.checkMainBanner();
 
+        for (String category : TestData.CATEGORIES) {
+            homePage.checkCategories(category);
+        }
 
-        steps.checkCategories("Смартфоны");
-        steps.checkCategories("Гаджеты");
-        steps.checkCategories("Автомобильная электроника");
-        steps.checkCategories("Аксессуары");
-        steps.checkCategories("Бытовая техника");
-        steps.checkCategories("Игровые платформы");
-        steps.checkCategories("Модемы и роутеры");
-        steps.checkCategories("Ноутбуки");
-
-
-        steps.checkShowButton();
-        steps.checkHideButtonVisible();
-        steps.clickHideButton();
-        steps.checkHideButtonHidden();
+        homePage.checkShowButton();
+        homePage.checkHideButtonVisible();
+        homePage.clickHideButton();
+        homePage.checkHideButtonHidden();
     }
 
-    @Test
+    @ParameterizedTest(name = "Категория: {0}")
+    @MethodSource("categoryNames")
     @DisplayName("Проверка работы кнопок категорий")
     @Tag("smoke")
-    void ButtonTest() {
-        steps.openPage();
-        steps.checkSelectCategoryPhones();
-        steps.openPage();
-        steps.checkSelectCategoryGadgets();
-        steps.openPage();
-        steps.checkSelectCategoryAutomotiveElectronics();
-        steps.openPage();
-        steps.checkSelectCategoryAccessories();
-        steps.openPage();
-        steps.checkSelectCategoryHouseholdAppliances();
-        steps.openPage();
-        steps.checkSelectCategoryGamingPlatforms();
-        steps.openPage();
-        steps.checkSelectCategoryModemsAndRouters();
-        steps.openPage();
-        steps.checkSelectCategoryLaptops();
+    void categoryNavigationTest(String category) {
+        homePage.openPage();
+        homePage.selectCategory(category);
     }
 
     @Test
     @DisplayName("Проверка работы поиска")
     @Tag("smoke")
-    void searchTest(){
-        steps.openPage();
-        steps.InputTest(product);
-        steps.ConfirmingThatThisSpecificProductHasBeenFound(product);
+    void searchTest() {
+        homePage.openPage();
+        homePage.searchProduct(TestData.SEARCH_QUERY);
+        homePage.verifySearchResultContains(TestData.SEARCH_QUERY);
     }
 
     @Test
-    @DisplayName("Проверка покупки телефона ''Iphone 11'")
+    @DisplayName("Проверка покупки телефона 'Iphone 11'")
     @Tag("smoke")
-    void buyPhoneTest(){
-        steps.openPage();
-        steps.InputTest("Iphone 11");
-        steps.testClickOnProductNameRedirectsToProductCard();
-        steps.testClickOnShopButtonRedirectsToYandexMarket();
+    void buyPhoneTest() {
+        homePage.openPage();
+        homePage.searchProduct(TestData.PRODUCT_SEARCH_QUERY);
+        homePage.openProductCard();
+        homePage.verifyShopRedirectToMarketplace();
     }
 
     @Test
     @DisplayName("Проверка добавления в избранное")
     @Tag("smoke")
-    void TestForAddingToFavorites(){
-        steps.openPage();
-        steps.InputTest("Iphone 11");
-        steps.testClickOnProductNameRedirectsToProductCard();
-        steps.testClickFavoritesButton();
-        steps.openFavorites();
-        steps.testOnFavoritesPage();
-        steps.productInFavoritesTest();
+    void addToFavoritesTest() {
+        homePage.openPage();
+        homePage.searchProduct(TestData.PRODUCT_SEARCH_QUERY);
+        homePage.openProductCard();
+        homePage.addToFavorites();
+        homePage.openFavorites();
+        homePage.verifyFavoritesPageOpened();
+        homePage.verifyProductInFavorites();
     }
 
     @Test
-    @DisplayName("Проверка добавления в Сравнение")
+    @DisplayName("Проверка добавления в сравнение")
     @Tag("smoke")
-    void TestForAddingToСompare() {
-        steps.openPage();
-        steps.InputTest("Iphone 11");
-        steps.testClickOnProductNameRedirectsToProductCard();
-        steps.testClickСompareButton();
-        steps.openСompare();
-        steps.testOnСomparePage();
-        steps.productInСompareTest();
+    void addToCompareTest() {
+        homePage.openPage();
+        homePage.searchProduct(TestData.PRODUCT_SEARCH_QUERY);
+        homePage.openProductCard();
+        homePage.addToCompare();
+        homePage.openComparePage();
+        homePage.verifyComparePageOpened();
+        homePage.verifyProductInCompare();
     }
 }
-
-
-
-
