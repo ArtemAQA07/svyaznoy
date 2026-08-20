@@ -39,7 +39,7 @@ public class TestBase {
         //метод выполняется перед каждым тестом
     void setUpBeforeEach() {
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide());//включение слушателя Аллюр
-        Configuration.browserSize = "1920x1080";
+        Configuration.browserSize = "1920x1080";//
     }
 
     @AfterEach
