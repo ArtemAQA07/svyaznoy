@@ -47,7 +47,7 @@ public class TestBase {
     void addAttachments() {
        Attach.screenshotAs("Last screenshot"); //Скриншот последнего состояния браузера.
         Attach.browserConsoleLogs(); //Логи консоли браузера.
-        Attach.addVideo(); // Видео записи теста.
         Selenide.closeWebDriver(); //Закрывает браузер.
+        Attach.addVideo(); // Видео записи теста.
     }
 }
