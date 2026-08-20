@@ -51,7 +51,7 @@
 
 <a id="jenkins"></a>
 <h2>
-  <img src="images/icons/jenkins.png" width="24" style="vertical-align: middle;" />
+  <img src="images/images/icons/Jenkins.svg" width="24" style="vertical-align: middle;" />
   Сборка в Jenkins
 </h2>
 Jenkins используется для автоматизации сборки и тестирования проекта. Он позволяет любому члену команды запускать тесты в любое время. В данном проекте сборка выполняется автоматически каждые 6 часов.
