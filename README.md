@@ -50,7 +50,10 @@
 - **Allure TestOps**: Платформа для управления тестированием и анализа результатов тестов.
 
 <a id="jenkins"></a>
-## <a href="https://www.jenkins.io/"><img height="25" src="images/images/icons/Jenkins.svg" width="25"/></a><a name="Сборка"></a>Сборка в [Jenkins](https://jenkins.autotests.cloud/job/rzd.ru_UI_regress/)</a>
+<h2>
+  <img src="images/images/icons/Jenkins.svg" width="24" style="vertical-align: middle;" />
+  Сборка в Jenkins
+</h2>
 Jenkins используется для автоматизации сборки и тестирования проекта. Он позволяет любому члену команды запускать тесты в любое время. В данном проекте сборка выполняется автоматически каждые 6 часов.
 <p align="center">  
 <a href="https://jenkins.autotests.cloud/job/rzd.ru_UI_regress/"><img src="images/screenshots/jenkins-scrin.png" alt="Jenkins" width="950"/></a>  
@@ -68,13 +71,13 @@ Jenkins используется для автоматизации сборки 
 
 ***Локальный запуск:***
 ```bash  
-gradle regression_test
+gradle checking_test
 
 ```
 
 ***Удаленный запуск в Jenkins:***
 ```bash  
-regression_test
+checking_test
 ```
 
 
@@ -87,13 +90,13 @@ Allure используется для генерации подробных о�
 ### Главная страница
 
 <p align="center">  
-<img title="Allure Overview Dashboard" src="images/screenshots/allure.png" width="850">  
+<img title="Allure Overview Dashboard" src="images/images/screenshots/Allure.png" width="850">  
 </p>
 
 ### Пример теста
 
   <p align="center">  
-<img title="Allure Graphics" src="images/screenshots/allure1.png" width="850">
+<img title="Allure Graphics" src="images/images/screenshots/Allure1.png" width="850">
 </p>
 
 <a id="telegram"></a>
@@ -117,16 +120,15 @@ Allure используется для генерации подробных о�
 <a id="other"></a>
 ### Плагины
 - **java-library**: Плагин для работы с Java библиотеками.
-- **io.qameta.allure (версия 2.11.2)**: Плагин для интеграции с Allure для генерации отчетов.
+- **io.qameta.allure (версия 3.0.0)**: Плагин для интеграции с Allure для генерации отчетов.
 
 ### Репозитории
 - **mavenCentral**: Репозиторий Maven Central для получения зависимостей.
 
 ### Зависимости (Dependencies)
-- **Selenide (версия 7.9.4)**: Фреймворк для написания лаконичных и стабильных UI тестов на Java.
-- **JUnit 5 (версия 5.10.2)**: Фреймворк для модульного тестирования на Java.
-- **Java Faker (версия 1.0.2)**: Библиотека для генерации фейковых данных для тестирования.
-- **Allure Selenide (версия 2.27.0)**: Для интеграции Selenide с Allure для детализированных отчетов.
+- **Selenide (версия 7.2.1)**: Фреймворк для написания лаконичных и стабильных UI тестов на Java.
+- **JUnit 5 (версия 5.10.1)**: Фреймворк для модульного тестирования на Java.
+- **Allure Selenide (версия 2.25.0)**: Для интеграции Selenide с Allure для детализированных отчетов.
 - **SLF4J Simple (версия 2.0.7)**: Простая фасадная библиотека для логирования в Java.
 
 ### Конфигурация
