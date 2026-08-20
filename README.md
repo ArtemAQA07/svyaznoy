@@ -56,7 +56,7 @@
 </h2>
 Jenkins используется для автоматизации сборки и тестирования проекта. Он позволяет любому члену команды запускать тесты в любое время. В данном проекте сборка выполняется автоматически каждые 6 часов.
 <p align="center">  
-<a href="https://jenkins.autotests.cloud/job/rzd.ru_UI_regress/"><img src="images/screenshots/jenkins-scrin.png" alt="Jenkins" width="950"/></a>  
+<a href="https://jenkins.autotests.cloud/job/rzd.ru_UI_regress/"><img src="images/screenshots/jenkins.png" alt="Jenkins" width="950"/></a>  
 </p>
 
 
