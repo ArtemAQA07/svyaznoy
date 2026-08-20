@@ -71,13 +71,13 @@ Jenkins используется для автоматизации сборки 
 
 ***Локальный запуск:***
 ```bash  
-gradle regression_test
+gradle checking_test
 
 ```
 
 ***Удаленный запуск в Jenkins:***
 ```bash  
-regression_test
+checking_test
 ```
 
 
