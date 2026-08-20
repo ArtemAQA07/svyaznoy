@@ -100,7 +100,7 @@ Allure используется для генерации подробных о�
 </p>
 
 <a id="telegram"></a>
-## <a href="https://t.me/swagoutbaby"><img alt="Allure" height="25" src="images/screenshots/tgmas.png" width="25"/></a> Интеграция с Telegram. Автоматические уведомления о сборке
+## <a href="https://t.me/swagoutbaby"><img alt="Allure" height="25" src="images/images/icons/Telegram.svg" width="25"/></a> Интеграция с Telegram. Автоматические уведомления о сборке
 Настроены автоматические уведомления в Telegram для получения информации о статусе сборки и тестирования.
 
 <p align="center">  
