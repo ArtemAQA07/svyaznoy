@@ -113,7 +113,7 @@ Allure используется для генерации подробных о�
 Помогают визуально проверять, как проходят тесты и выявлять проблемы.
 
 <p align="center">
-<img title="Selenoid Video" src="images/video/video.gif" width="550" height="350"  alt="video">   
+<img title="Selenoid Video" src="images/video/test.gif" width="550" height="350"  alt="video">   
 </p>
 
 
