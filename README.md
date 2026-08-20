@@ -104,7 +104,7 @@ Allure используется для генерации подробных о�
 Настроены автоматические уведомления в Telegram для получения информации о статусе сборки и тестирования.
 
 <p align="center">  
-<img title="Allure Overview Dashboard" src="images/screenshots/telega-scrin.png" width="550">  
+<img title="Allure Overview Dashboard" src="images/screenshots/tgmas.png" width="550">  
 </p>
 
 
